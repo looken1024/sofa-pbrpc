@@ -1,64 +1,40 @@
-sofa-pbrpc
-==========
-[![Build Status](https://travis-ci.org/baidu/sofa-pbrpc.svg)](https://travis-ci.org/baidu/sofa-pbrpc)
-[![Join the chat at https://gitter.im/sofa-pbrpc/rpc](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sofa-pbrpc/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/10957/badge.svg)](https://scan.coverity.com/projects/baidu-sofa-pbrpc)
+# sofa-pbrpc
+同步至https://github.com/baidu/sofa-pbrpc
 
-A light-weight RPC implementation of Google's protobuf RPC framework.
+# 编译依赖
+## boost
+if [ ! -f "${FLAG_DIR}/boost_1_57_0" ] \
+    || [ ! -d "${DEPS_PREFIX}/boost_1_57_0/boost" ]; then
+    wget -O ${DEPS_PREFIX}/boost_1_57_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.tar.gz
+    tar zxf ${DEPS_PREFIX}/boost_1_57_0.tar.gz -C ${DEPS_PREFIX}
+    touch "${FLAG_DIR}/boost_1_57_0"
+fi
 
-Wiki: https://github.com/baidu/sofa-pbrpc/wiki
+## protobuf
+if [ ! -f "${FLAG_DIR}/protobuf_2_6_1" ] \
+    || [ ! -f "${DEPS_PREFIX}/lib/libprotobuf.a" ] \
+    || [ ! -d "${DEPS_PREFIX}/include/google/protobuf" ]; then
+    wget -O ${DEPS_PREFIX}/protobuf-2.6.1.tar.gz https://github.com/google/protobuf/releases/download/v2.6.1/protobuf-2.6.1.tar.gz
+    tar zxf ${DEPS_PREFIX}/protobuf-2.6.1.tar.gz -C ${DEPS_PREFIX}
+    cd ${DEPS_PREFIX}/protobuf-2.6.1
+    autoreconf -ivf
+    ./configure ${DEPS_CONFIG}
+    make -j4
+    make install
+    cd -
+    touch "${FLAG_DIR}/protobuf_2_6_1"
+fi
 
-### Features
-* High performace.
-* Easy to use. Refer to sample code in './sample'.
-* Supports sync call and async call. Refer to './sample/echo'.
-* Supports three level (service/method/request) timeout. Refer to './sample/timeout_sample'.
-* Supports transparent compression. Refer to './sample/compress_sample'.
-* Supports mock test. Refer to './sample/mock_sample'.
-* Supports network flow control.
-* Supports auto connecting and reconnecting.
-* Supports keep alive time of idle connections.
-* Supports statistics for profiling.
-* Supports multi-server load balance and fault tolerance.
-* Supports http protocol.
-* Provides web monitor.
-* Provides python client library.
-
-### Dependencies
-This lib depends on boost-1.53.0 (only need header), protobuf-2.4.1, snappy and zlib:
-* boost - http://www.boost.org/
-* protobuf - http://code.google.com/p/protobuf/
-* snappy - http://code.google.com/p/snappy/
-* zlib - http://zlib.net/
-
-ATTENTION: boost header is only needed when compiling the lib, but is not needed for user code.
-
-Extrally, './unit-test' and './sample/mock_sample' also depends on gtest:
-* gtest - http://code.google.com/p/googletest/
-
-### Build
-1. Modify the file './depends.mk' to specify depending libs.<br>
-  The necessary libs are boost, protobuf, snappy, and zlib.
-2. Run 'make' to build sofa-pbrpc.<br>
-  The default optimization level is 'O2'.<br>
-  To change it, modify the 'OPT' variable in file './Makefile'.
-3. Run 'make install' to install sofa-pbrpc.<br>
-  The default install directory is './output'.<br>
-  To change it, modify the 'PREFIX' variable in file './Makefile'.
-
-For more details, please refer to the wiki [Build Guide](https://github.com/baidu/sofa-pbrpc/wiki/%E6%9E%84%E5%BB%BA%E6%8C%87%E5%BC%95).
-
-### Sample
-For sample code, please refer to ['./sample'](https://github.com/baidu/sofa-pbrpc/tree/master/sample) and the wiki [Quick Start](https://github.com/baidu/sofa-pbrpc/wiki/%E5%BF%AB%E9%80%9F%E4%BD%BF%E7%94%A8).
-
-### Profiling
-For Profiling feature, please refer to the wiki [Profiling](https://github.com/baidu/sofa-pbrpc/wiki/Profiling%E5%8A%9F%E8%83%BD).
-
-### Performance
-For performace details, please refer to the wiki [Performance](https://github.com/baidu/sofa-pbrpc/wiki/%E6%80%A7%E8%83%BD).
-
-### Implementation
-For implementation details, please refer to the wiki and file [doc/sofa-pbrpc-document.md](doc/sofa-pbrpc-document.md).
-
-### Support
-opensearch@baidu.com
+## snappy
+if [ ! -f "${FLAG_DIR}/snappy_1_1_1" ] \
+    || [ ! -f "${DEPS_PREFIX}/lib/libsnappy.a" ] \
+    || [ ! -f "${DEPS_PREFIX}/include/snappy.h" ]; then
+    wget -O ${DEPS_PREFIX}/snappy-1.1.3.tar.gz https://github.com/google/snappy/releases/download/1.1.3/snappy-1.1.3.tar.gz
+    tar zxf ${DEPS_PREFIX}/snappy-1.1.3.tar.gz -C ${DEPS_PREFIX}
+    cd ${DEPS_PREFIX}/snappy-1.1.3
+    ./configure ${DEPS_CONFIG}
+    make -j4
+    make install
+    cd -
+    touch "${FLAG_DIR}/snappy_1_1_1"
+fi
